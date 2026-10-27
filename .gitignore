@@ -1,0 +1,8 @@
+*.exe
+*.pdb
+*.log
+self-test.txt
+preview.png
+.vs/
+bin/
+obj/
