@@ -1,5 +1,7 @@
 # 星脉 · 资源管家
 
+作者：**xiaobing1103** · 开源协议：**MIT License** · [GitHub 项目](https://github.com/xiaobing1103/xingmai-resource-manager)
+
 一个深色科技风的 Windows 资源监控与进程管理小工具，使用 C# 和 WPF 编写。
 
 ## 功能

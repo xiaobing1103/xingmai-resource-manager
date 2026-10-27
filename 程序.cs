@@ -119,11 +119,19 @@ class Program {
   grid=Find<DataGrid>("Apps");search=Find<TextBox>("Search");
   search.TextChanged+=delegate{RefreshList();};grid.SelectionChanged+=delegate{RefreshDetails();};
   Find<Button>("Sort").Click+=delegate{sortCpu=!sortCpu;Find<Button>("Sort").Content=sortCpu?"排序：CPU ↓":"排序：内存 ↓";RefreshList();};
+  Find<Button>("About").Click+=delegate{ShowAbout();};
   Find<Button>("Pause").Click+=delegate{paused=!paused;Find<Button>("Pause").Content=paused?"继续":"暂停";Text("Live",paused?"●  已暂停刷新":"●  实时监测 · 每 2 秒");};
   Find<Button>("CloseApp").Click+=delegate{Act(false);};Find<Button>("KillApp").Click+=delegate{Act(true);};
   timer=new DispatcherTimer{Interval=TimeSpan.FromSeconds(2)};timer.Tick+=async delegate{await Update();};
   window.Loaded+=async delegate {await Update();timer.Start();};window.Closed+=delegate{timer.Stop();};
   app.Run(window);
+ }
+ void ShowAbout() {
+  var dialog=new Window{Owner=window,Title="关于星脉 · 资源管家",Width=520,Height=340,ResizeMode=ResizeMode.NoResize,WindowStartupLocation=WindowStartupLocation.CenterOwner,Background=window.Background,Foreground=window.Foreground,FontFamily=window.FontFamily,ShowInTaskbar=false};
+  var root=new Grid{Margin=new Thickness(28)};root.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});root.RowDefinitions.Add(new RowDefinition{Height=new GridLength(1,GridUnitType.Star)});root.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});
+  root.Children.Add(new TextBlock{Text="◈  星脉 · 资源管家",FontSize=25,FontWeight=FontWeights.Bold,Foreground=new SolidColorBrush(Color.FromRgb(70,225,236))});
+  var info=new TextBlock{Text="轻量的 Windows CPU、内存与进程管理工具\n\n作者：xiaobing1103\n开源协议：MIT License\n项目地址：github.com/xiaobing1103/xingmai-resource-manager\n\n本地运行 · 无需联网 · 不上传数据",Foreground=new SolidColorBrush(Color.FromRgb(180,197,220)),FontSize=14,LineHeight=25,Margin=new Thickness(0,20,0,12),TextWrapping=TextWrapping.Wrap};Grid.SetRow(info,1);root.Children.Add(info);
+  var close=new Button{Content="关闭",Width=92,HorizontalAlignment=HorizontalAlignment.Right,Padding=new Thickness(16,8,16,8)};close.Click+=delegate{dialog.Close();};Grid.SetRow(close,2);root.Children.Add(close);dialog.Content=root;dialog.ShowDialog();
  }
  async Task Update() {
   if(busy||paused||acting)return;busy=true;
